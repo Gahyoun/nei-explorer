@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NEI Explorer</title>
+<meta name="description" content="Interactive scatter of every tabulated index of the 165 networks of the NEI manuscript: choose the x and y axes and toggle category layers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='4' cy='11' r='2.4' fill='%23E76F51'/%3E%3Crect x='8' y='3' width='4.6' height='4.6' fill='%23E9C46A'/%3E%3Cpath d='M12 9l2.4 2.4L12 13.8 9.6 11.4z' fill='%23D45087'/%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script src="data/nei_data.js"></script>
+<style>
+:root {
+  --bg: #ffffff; --panel: #f6f7f9; --line: #dfe2e7; --text: #1d2330; --muted: #5f6878; --accent: #2a6fdb;
+  --grid: #e9ecf1; --ref: #8a93a3; --hl: #111111;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171c; --panel: #1c2027; --line: #2d333d; --text: #e6e9ee; --muted: #9aa3b2; --accent: #6ea2ff;
+    --grid: #262b33; --ref: #7d8696; --hl: #ffffff;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171c; --panel: #1c2027; --line: #2d333d; --text: #e6e9ee; --muted: #9aa3b2; --accent: #6ea2ff;
+  --grid: #262b33; --ref: #7d8696; --hl: #ffffff;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+header { padding: 14px 20px 10px; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+header .src { color: var(--muted); font-size: 12.5px; flex: 1 1 300px; }
+header button { margin-left: auto; }
+.wrap { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: calc(100vh - 56px); }
+aside { background: var(--panel); border-right: 1px solid var(--line); padding: 14px 14px 30px; overflow-y: auto; max-height: calc(100vh - 56px); position: sticky; top: 0; }
+main { padding: 10px 16px 24px; min-width: 0; }
+h2 { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 18px 0 8px; font-weight: 650; }
+h2:first-child { margin-top: 0; }
+label.ax { display: block; font-size: 12.5px; color: var(--muted); margin: 8px 0 3px; }
+select, input[type=search] { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px;
+  background: var(--bg); color: var(--text); font: inherit; font-size: 13px; }
+.row { display: flex; gap: 10px; align-items: center; margin-top: 4px; font-size: 13px; }
+.row label { display: flex; gap: 5px; align-items: center; cursor: pointer; }
+.desc { font-size: 12px; color: var(--muted); margin-top: 3px; min-height: 1.2em; }
+button { font: inherit; font-size: 12.5px; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--line);
+  background: var(--bg); color: var(--text); cursor: pointer; }
+button:hover { border-color: var(--accent); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.layers { list-style: none; margin: 0; padding: 0; }
+.layers li { display: flex; align-items: center; gap: 7px; padding: 2px 0; font-size: 13px; }
+.layers li label { display: flex; align-items: center; gap: 7px; cursor: pointer; flex: 1; }
+.layers li .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; }
+.layers li.dim label { opacity: .45; }
+.grp { font-weight: 600; margin-top: 6px; }
+.grpbtns { display: flex; gap: 6px; margin: 4px 0 6px; }
+#plot { width: 100%; height: min(78vh, 760px); min-height: 420px; }
+.stats { font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; padding: 2px 4px 6px; }
+.stats b { color: var(--text); font-weight: 600; }
+#detail { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 10px; font-size: 13px; }
+#detail h3 { margin: 0 0 6px; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+#detail table { border-collapse: collapse; width: 100%; max-width: 900px; }
+#detail td { padding: 2px 10px 2px 0; border-bottom: 1px solid var(--grid); vertical-align: top; }
+#detail td:first-child { color: var(--muted); width: 45%; }
+#detail .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 24px; }
+.hint { color: var(--muted); font-size: 12.5px; }
+a { color: var(--accent); }
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: 1fr; }
+  aside { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); }
+  header, main { padding-left: 16px; padding-right: 16px; }
+  #plot { height: 70vh; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>NEI Explorer</h1>
+  <div class="src" id="src"></div>
+  <button id="theme" title="Toggle light/dark">◐</button>
+</header>
+<div class="wrap">
+<aside>
+  <h2>Axes</h2>
+  <label class="ax" for="xsel">x axis</label>
+  <select id="xsel"></select>
+  <div class="row"><label><input type="checkbox" id="xlog"> log x</label></div>
+  <div class="desc" id="xdesc"></div>
+  <label class="ax" for="ysel">y axis</label>
+  <select id="ysel"></select>
+  <div class="row"><label><input type="checkbox" id="ylog"> log y</label><button id="swap" title="Swap x and y">⇄ swap</button></div>
+  <div class="desc" id="ydesc"></div>
+
+  <h2>Presets</h2>
+  <div class="presets" id="presets"></div>
+
+  <h2>Reference layers</h2>
+  <div class="row"><label><input type="checkbox" id="ref_diag" checked> y = x</label>
+    <label><input type="checkbox" id="ref_one" checked> x = 1, y = 1</label></div>
+  <div class="row"><label><input type="checkbox" id="ref_sig"> outline BH-significant (𝒞<sub>deg</sub>)</label></div>
+
+  <h2>Category layers</h2>
+  <div id="layers"></div>
+
+  <h2>Find network</h2>
+  <input type="search" id="find" list="netlist" placeholder="e.g. power-US-Grid">
+  <datalist id="netlist"></datalist>
+  <p class="hint">Click a point to list all its indices. Drag to zoom, double-click to reset.</p>
+  <p class="hint"><a href="data/nei_indices.csv" download>Download all indices (CSV)</a></p>
+</aside>
+<main>
+  <div class="stats" id="stats"></div>
+  <div id="plot"></div>
+  <div id="detail"><span class="hint">No network selected.</span></div>
+</main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  const D = window.NEI;
+  const VARS = Object.fromEntries(D.vars.map(v => [v.key, v]));
+  const CATS = D.categories;
+  const CAT = Object.fromEntries(CATS.map(c => [c.key, c]));
+  const ROWS = D.rows;
+  const state = { x: "C_deg", y: "C_gnm", xlog: true, ylog: true, on: {}, find: "", picked: null };
+  CATS.forEach(c => state.on[c.key] = true);
+
+  // manuscript marker macro -> plotly symbol
+  const SYM = { circle: "circle", square: "square", diamond: "diamond", thindiamond: "diamond-tall",
+    plus: "cross", cross: "x", star: "star", "triangle-up": "triangle-up", "triangle-down": "triangle-down",
+    "triangle-left": "triangle-left", "triangle-right": "triangle-right", pentagon: "pentagon",
+    hexagon: "hexagon2", octagon: "octagon" };
+  const SIZE = { star: 13, plus: 10, cross: 10, thindiamond: 11 };
+
+  // small svg icon of a marker (legend)
+  function icon(shape, color) {
+    const s = 14, c = s / 2, r = 5.4;
+    const poly = (n, rot) => Array.from({ length: n }, (_, i) => {
+      const a = (rot - 90 + 360 * i / n) * Math.PI / 180; return `${(c + r * Math.cos(a)).toFixed(2)},${(c + r * Math.sin(a)).toFixed(2)}`; }).join(" ");
+    let body;
+    switch (shape) {
+      case "circle": body = `<circle cx="${c}" cy="${c}" r="${r}"/>`; break;
+      case "square": body = `<rect x="${c - 4.6}" y="${c - 4.6}" width="9.2" height="9.2"/>`; break;
+      case "diamond": body = `<polygon points="${c},${c - 6} ${c + 4.8},${c} ${c},${c + 6} ${c - 4.8},${c}"/>`; break;
+      case "thindiamond": body = `<polygon points="${c},${c - 6} ${c + 2.7},${c} ${c},${c + 6} ${c - 2.7},${c}"/>`; break;
+      case "plus": body = `<path d="M${c - 1.8} ${c - 6}h3.6v4.2h4.2v3.6h-4.2v4.2h-3.6v-4.2h-4.2v-3.6h4.2z"/>`; break;
+      case "cross": body = `<path transform="rotate(45 ${c} ${c})" d="M${c - 1.8} ${c - 6}h3.6v4.2h4.2v3.6h-4.2v4.2h-3.6v-4.2h-4.2v-3.6h4.2z"/>`; break;
+      case "star": body = `<polygon points="${Array.from({ length: 10 }, (_, i) => { const rr = i % 2 ? 2.6 : 6.6, a = (-90 + 36 * i) * Math.PI / 180; return `${(c + rr * Math.cos(a)).toFixed(2)},${(c + rr * Math.sin(a)).toFixed(2)}`; }).join(" ")}"/>`; break;
+      case "triangle-up": body = `<polygon points="${poly(3, 0)}"/>`; break;
+      case "triangle-down": body = `<polygon points="${poly(3, 180)}"/>`; break;
+      case "triangle-left": body = `<polygon points="${poly(3, -90)}"/>`; break;
+      case "triangle-right": body = `<polygon points="${poly(3, 90)}"/>`; break;
+      case "pentagon": body = `<polygon points="${poly(5, 0)}"/>`; break;
+      case "hexagon": body = `<polygon points="${poly(6, 30)}"/>`; break;
+      case "octagon": body = `<polygon points="${poly(8, 22.5)}"/>`; break;
+      default: body = `<circle cx="${c}" cy="${c}" r="${r}"/>`;
+    }
+    return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" aria-hidden="true" fill="${color}">${body}</svg>`;
+  }
+
+  const strip = html => html.replace(/<sub>(.*?)<\/sub>/g, "_$1").replace(/<[^>]+>/g, "");
+  const fmt = v => v == null ? "—" : (typeof v === "boolean" ? (v ? "yes" : "no") :
+    (typeof v === "number" ? (Math.abs(v) !== 0 && (Math.abs(v) < 1e-3 || Math.abs(v) >= 1e5) ? v.toExponential(2) : String(+v.toPrecision(4))) : v));
+
+  // ---------- controls ----------
+  document.getElementById("src").textContent = "Source: " + D.source + " · " + ROWS.length + " networks";
+  const groups = {};
+  D.vars.forEach(v => (groups[v.source] = groups[v.source] || []).push(v));
+  for (const id of ["xsel", "ysel"]) {
+    const sel = document.getElementById(id);
+    for (const [src, vs] of Object.entries(groups)) {
+      const og = document.createElement("optgroup"); og.label = src;
+      vs.forEach(v => { const o = document.createElement("option"); o.value = v.key; o.textContent = `${strip(v.label)}  (n=${v.n})`; og.appendChild(o); });
+      sel.appendChild(og);
+    }
+  }
+  const PRESETS = [
+    ["𝒞deg vs 𝒞gnm", "C_deg", "C_gnm"], ["𝓘̄real vs ⟨𝓘⟩deg", "Ibar_real", "I_deg"], ["𝓘̄real vs ⟨𝓘⟩gnm", "Ibar_real", "I_gnm"],
+    ["𝒞deg vs 𝒞sbm", "C_deg", "C_sbm"], ["𝒞deg vs 𝒞dcsbm", "C_deg", "C_dcsbm"], ["⟨k⟩ vs 𝓘real", "k_mean", "I_real"],
+    ["⟨k⟩ vs 𝓢real", "k_mean", "S_real"], ["N vs 𝓘real", "N", "I_real"], ["𝓘inter vs 𝓘intra (Bdc)", "Iinter_Bdc_real", "Iintra_Bdc_real"],
+    ["𝓘real vs 𝓘̄real/𝓘real", "I_real", "Ibar_over_I"]];
+  const pre = document.getElementById("presets");
+  PRESETS.forEach(([lab, x, y]) => { const b = document.createElement("button"); b.textContent = lab;
+    b.onclick = () => { setAxes(x, y); }; pre.appendChild(b); });
+
+  const lay = document.getElementById("layers");
+  for (const g of ["non-road", "road"]) {
+    const cs = CATS.filter(c => c.group === g);
+    const head = document.createElement("div"); head.className = "grp";
+    head.textContent = g === "road" ? "Road networks (Table S4)" : "Non-road networks (Tables S2, S3)";
+    const btns = document.createElement("div"); btns.className = "grpbtns";
+    const all = document.createElement("button"); all.textContent = "all";
+    const none = document.createElement("button"); none.textContent = "none";
+    const only = document.createElement("button"); only.textContent = "only this group";
+    all.onclick = () => { cs.forEach(c => state.on[c.key] = true); syncLayers(); draw(); };
+    none.onclick = () => { cs.forEach(c => state.on[c.key] = false); syncLayers(); draw(); };
+    only.onclick = () => { CATS.forEach(c => state.on[c.key] = c.group === g); syncLayers(); draw(); };
+    btns.append(all, none, only);
+    const ul = document.createElement("ul"); ul.className = "layers";
+    cs.forEach(c => {
+      const li = document.createElement("li"); li.id = "li_" + c.key;
+      li.innerHTML = `<label><input type="checkbox" data-k="${c.key}" checked>${icon(c.shape, c.color)}<span>${c.name}</span></label><span class="n" id="n_${c.key}"></span>`;
+      ul.appendChild(li);
+    });
+    lay.append(head, btns, ul);
+  }
+  lay.addEventListener("change", e => { const k = e.target.dataset.k; if (k) { state.on[k] = e.target.checked; draw(); } });
+  function syncLayers() { lay.querySelectorAll("input[data-k]").forEach(i => i.checked = state.on[i.dataset.k]); }
+
+  const nl = document.getElementById("netlist");
+  ROWS.forEach(r => { const o = document.createElement("option"); o.value = r.network; nl.appendChild(o); });
+
+  function setAxes(x, y) {
+    state.x = x; state.y = y; state.xlog = VARS[x].log; state.ylog = VARS[y].log;
+    sync(); draw(); writeHash();
+  }
+  function sync() {
+    document.getElementById("xsel").value = state.x; document.getElementById("ysel").value = state.y;
+    document.getElementById("xlog").checked = state.xlog; document.getElementById("ylog").checked = state.ylog;
+    document.getElementById("xdesc").textContent = VARS[state.x].desc + " · " + VARS[state.x].source;
+    document.getElementById("ydesc").textContent = VARS[state.y].desc + " · " + VARS[state.y].source;
+  }
+  document.getElementById("xsel").onchange = e => setAxes(e.target.value, state.y);
+  document.getElementById("ysel").onchange = e => setAxes(state.x, e.target.value);
+  document.getElementById("xlog").onchange = e => { state.xlog = e.target.checked; draw(); writeHash(); };
+  document.getElementById("ylog").onchange = e => { state.ylog = e.target.checked; draw(); writeHash(); };
+  document.getElementById("swap").onclick = () => { const { x, y, xlog, ylog } = state; state.x = y; state.y = x; state.xlog = ylog; state.ylog = xlog; sync(); draw(); writeHash(); };
+  ["ref_diag", "ref_one", "ref_sig"].forEach(id => document.getElementById(id).onchange = draw);
+  document.getElementById("find").addEventListener("input", e => {
+    const v = e.target.value.trim(); const hit = ROWS.find(r => r.network === v);
+    state.find = hit ? v : ""; if (hit) showDetail(hit); draw(); });
+
+  // ---------- theme ----------
+  const themeBtn = document.getElementById("theme");
+  function isDark() { const t = document.documentElement.dataset.theme;
+    return t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  themeBtn.onclick = () => { document.documentElement.dataset.theme = isDark() ? "light" : "dark";
+    try { localStorage.setItem("nei-theme", document.documentElement.dataset.theme); } catch (e) {} draw(); };
+  try { const t = localStorage.getItem("nei-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => draw());
+
+  // ---------- statistics ----------
+  function ranks(a) { const idx = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]); const r = new Array(a.length);
+    for (let i = 0; i < idx.length;) { let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+      for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; }
+  function spearman(x, y) { if (x.length < 3) return NaN; const rx = ranks(x), ry = ranks(y), n = x.length;
+    const mx = rx.reduce((s, v) => s + v, 0) / n, my = ry.reduce((s, v) => s + v, 0) / n;
+    let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (rx[i] - mx) * (ry[i] - my); sxx += (rx[i] - mx) ** 2; syy += (ry[i] - my) ** 2; }
+    return sxy / Math.sqrt(sxx * syy); }
+  const median = a => { const s = [...a].sort((p, q) => p - q), n = s.length; return n ? (n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2) : NaN; };
+
+  // ---------- plot ----------
+  const plotEl = document.getElementById("plot");
+  function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function valid(v, log) { return v != null && isFinite(v) && (!log || v > 0); }
+
+  function draw() {
+    const X = state.x, Y = state.y, traces = [];
+    let all = [], nOn = 0, nOff = 0, nMissing = 0;
+    for (const c of CATS) {
+      const rows = ROWS.filter(r => r.cat === c.key);
+      const ok = rows.filter(r => valid(r[X], state.xlog) && valid(r[Y], state.ylog));
+      nMissing += rows.length - ok.length;
+      const nEl = document.getElementById("n_" + c.key);
+      nEl.textContent = ok.length === rows.length ? rows.length : `${ok.length}/${rows.length}`;
+      document.getElementById("li_" + c.key).classList.toggle("dim", ok.length === 0);
+      if (!state.on[c.key]) { nOff += ok.length; continue; }
+      nOn += ok.length; all = all.concat(ok);
+      if (!ok.length) continue;
+      const sig = document.getElementById("ref_sig").checked;
+      traces.push({
+        type: "scatter", mode: "markers", name: c.name, x: ok.map(r => r[X]), y: ok.map(r => r[Y]),
+        customdata: ok.map(r => r.network),
+        text: ok.map(r => `<b>${r.network}</b><br>${c.name} · N=${fmt(r.N)}, E=${fmt(r.E)}<br>${strip(VARS[X].label)} = ${fmt(r[X])}<br>${strip(VARS[Y].label)} = ${fmt(r[Y])}`),
+        hovertemplate: "%{text}<extra></extra>",
+        marker: { symbol: SYM[c.shape], color: c.color, opacity: 0.85, size: SIZE[c.shape] || 9,
+          line: { width: ok.map(r => sig && r.BH_deg ? 1.6 : 0), color: css("--hl") } }
+      });
+    }
+    // highlight
+    const hl = ROWS.find(r => r.network === (state.find || state.picked));
+    if (hl && valid(hl[X], state.xlog) && valid(hl[Y], state.ylog)) {
+      traces.push({ type: "scatter", mode: "markers+text", x: [hl[X]], y: [hl[Y]], text: [hl.network], textposition: "top right",
+        textfont: { color: css("--hl"), size: 12 }, hoverinfo: "skip", showlegend: false,
+        marker: { symbol: "circle-open", size: 22, color: css("--hl"), line: { width: 2 } } });
+    }
+    // reference lines over the data range
+    const xs = all.map(r => r[X]), ys = all.map(r => r[Y]);
+    const shapes = [];
+    if (xs.length) {
+      const lo = Math.min(...xs, ...ys), hi = Math.max(...xs, ...ys);
+      if (document.getElementById("ref_diag").checked)
+        shapes.push({ type: "line", xref: "x", yref: "y", x0: lo, y0: lo, x1: hi, y1: hi, line: { color: css("--ref"), width: 1.2, dash: "dash" }, layer: "below" });
+      if (document.getElementById("ref_one").checked) {
+        shapes.push({ type: "line", xref: "x", yref: "paper", x0: 1, x1: 1, y0: 0, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "below" });
+        shapes.push({ type: "line", xref: "paper", yref: "y", x0: 0, x1: 1, y0: 1, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "below" });
+      }
+    }
+    const decades = v => { const p = v.filter(q => q > 0); return p.length ? Math.log10(Math.max(...p) / Math.min(...p)) : 0; };
+    const axis = (k, log) => ({ title: { text: VARS[k].label, font: { size: 15 } }, type: log ? "log" : "linear",
+      dtick: log ? (decades(k === X ? xs : ys) >= 1.5 ? 1 : "D2") : undefined,
+      gridcolor: css("--grid"), zeroline: false, linecolor: css("--line"), mirror: true, ticks: "inside",
+      exponentformat: "power", automargin: true });
+    const layout = {
+      paper_bgcolor: css("--bg"), plot_bgcolor: css("--bg"), font: { color: css("--text"), family: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" },
+      xaxis: axis(X, state.xlog), yaxis: axis(Y, state.ylog), shapes, showlegend: false,
+      margin: { l: 70, r: 20, t: 16, b: 60 }, hovermode: "closest",
+      hoverlabel: { bgcolor: css("--panel"), bordercolor: css("--line"), font: { color: css("--text") } }
+    };
+    Plotly.react(plotEl, traces, layout, { responsive: true, displaylogo: false,
+      toImageButtonOptions: { format: "png", filename: `nei_${X}_vs_${Y}`, scale: 3 } });
+
+    const rho = spearman(xs, ys);
+    const below = ys.filter((y, i) => y < xs[i]).length;
+    document.getElementById("stats").innerHTML =
+      `<span>shown <b>${nOn}</b></span><span>hidden layers ${nOff}</span><span>no value${state.xlog || state.ylog ? " / ≤0 on log axis" : ""} ${nMissing}</span>` +
+      `<span>Spearman ρ <b>${isFinite(rho) ? rho.toFixed(3) : "—"}</b></span>` +
+      `<span>median x <b>${fmt(median(xs))}</b>, median y <b>${fmt(median(ys))}</b></span>` +
+      `<span>y &lt; x in <b>${below}</b>/${xs.length}</span>`;
+  }
+
+  // ---------- details ----------
+  function showDetail(r) {
+    state.picked = r.network;
+    const c = CAT[r.cat];
+    const meta = [["category", c.name], ["table header", r.header], ["ℓ_uv", r.ell], ["BH-significant 𝒞_deg / 𝒞_gnm", `${fmt(r.BH_deg)} / ${fmt(r.BH_gnm)}`],
+      ["numerical floor (†)", fmt(r.floor_dagger)], ["block-model nulls", r.sbm_from_tex ? "tex 1102 (not printed in the PDF)" : "—"]];
+    const vals = D.vars.map(v => [strip(v.label), fmt(r[v.key])]);
+    const tr = rows => rows.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join("");
+    const h = Math.max(0, Math.ceil((vals.length + meta.length) / 2) - meta.length);
+    document.getElementById("detail").innerHTML =
+      `<h3>${icon(c.shape, c.color)} ${r.network}</h3><div class="cols"><table>${tr(meta)}${tr(vals.slice(0, h))}</table>` +
+      `<table>${tr(vals.slice(h))}</table></div>`;
+  }
+  function bindClick() { plotEl.on("plotly_click", ev => { const p = ev.points[0]; const r = ROWS.find(q => q.network === p.customdata);
+    if (r) { showDetail(r); draw(); } }); }
+
+  // ---------- url state ----------
+  function writeHash() { try { history.replaceState(null, "", `#x=${state.x}&y=${state.y}&lx=${+state.xlog}&ly=${+state.ylog}`); } catch (e) {} }
+  function readHash() { const h = new URLSearchParams(location.hash.slice(1));
+    if (VARS[h.get("x")]) state.x = h.get("x"); if (VARS[h.get("y")]) state.y = h.get("y");
+    state.xlog = h.has("lx") ? h.get("lx") === "1" : VARS[state.x].log; state.ylog = h.has("ly") ? h.get("ly") === "1" : VARS[state.y].log; }
+
+  readHash(); sync(); draw(); bindClick();
+})();
+</script>
+</body>
+</html>

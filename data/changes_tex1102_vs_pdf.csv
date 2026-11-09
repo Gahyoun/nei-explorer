@@ -1,0 +1,594 @@
+network,index,tex_1102,pdf
+inf-USAir97,ell,1/ω,ω
+ia-primary-school,ell,ω,1
+inf-USAir97,I_real,0.0449,0.0114
+ia-primary-school,I_real,0.0737,0.0909
+inf-USAir97,I_deg,0.0643,0.0491
+ia-primary-school,I_deg,0.141,0.151
+inf-USAir97,I_gnm,0.111,0.0919
+ia-primary-school,I_gnm,0.155,0.179
+inf-USAir97,S_real,0.0084,0.0656
+ia-primary-school,S_real,0.0234,0.0544
+inf-USAir97,S_deg,0.0118,0.0102
+ia-primary-school,S_deg,0.0114,0.00904
+inf-USAir97,S_gnm,0.017,0.0194
+ia-primary-school,S_gnm,0.0131,0.00897
+inf-USAir97,C_deg,0.687,0.184
+ia-primary-school,C_deg,0.509,0.577
+inf-USAir97,C_gnm,0.399,0.0986
+ia-primary-school,C_gnm,0.464,0.485
+inf-USAir97,Ibar_real,0.0442,0.00905
+ia-primary-school,Ibar_real,0.0718,0.087
+inf-USAir97,s_block,0.000382,0.0007230000000000001
+ia-primary-school,s_block,0.00166,0.00101
+inf-USAir97,I50,0.0454,0.00668
+ia-primary-school,I50,0.0743,0.0902
+inf-USAir97,S50,0.00867,0.00418
+ia-primary-school,S50,0.0235,0.0554
+inf-USAir97,Ibar_over_I,0.983,0.792
+ia-primary-school,Ibar_over_I,0.975,0.957
+ca-GrQc,Iinter_B_gnm,,0.143
+ca-Erdos992,Iinter_B_gnm,,0.113
+fb-pages-food,Iinter_B_gnm,,0.138
+soc-hamsterster,Iinter_B_gnm,,0.161
+fb-pages-tvshow,Iinter_B_gnm,,0.15
+soc-advogato,Iinter_B_gnm,,0.161
+fb-pages-politician,Iinter_B_gnm,,0.163
+fb-pages-government,Iinter_B_gnm,,0.167
+soc-wiki-elec,Iinter_B_gnm,,0.171
+Chilean grid (reduced),Iinter_B_gnm,,0.101
+Chilean grid (no tap),Iinter_B_gnm,,0.035
+Chilean grid (with tap),Iinter_B_gnm,,0.045
+US airports (2010),Iinter_B_gnm,,0.1
+Openflights airports (2010),Iinter_B_gnm,,0.141
+Global air network (2023),Iinter_B_gnm,,0.132
+bio-celegans,Iinter_B_gnm,,0.143
+bio-SC-LC,Iinter_B_gnm,,0.162
+bio-WormNet-v3,Iinter_B_gnm,,0.172
+bio-DM-CX,Iinter_B_gnm,,0.167
+bn-mouse-brain-1,Iinter_B_gnm,,0.173
+bn-fly-drosophila-1,Iinter_B_gnm,,0.152
+eco-foodweb-baywet,Iinter_B_gnm,,0.172
+econ-mbeacxc,Iinter_B_gnm,,0.111
+econ-psmigr1,Iinter_B_gnm,,0.117
+socfb-Caltech36,Iinter_B_gnm,,0.172
+socfb-Williams40,Iinter_B_gnm,,0.173
+socfb-Mich67,Iinter_B_gnm,,0.17
+socfb-MIT,Iinter_B_gnm,,0.17
+socfb-Dartmouth6,Iinter_B_gnm,,0.17
+socfb-Duke14,Iinter_B_gnm,,0.17
+ia-infect-hyper,Iinter_B_gnm,,0.17
+ia-email-univ,Iinter_B_gnm,,0.151
+ia-reality,Iinter_B_gnm,,0.093
+power-eris1176,Iinter_B_gnm,,0.161
+power-US-Grid,Iinter_B_gnm,,0.107
+power-bcspwr10,Iinter_B_gnm,,0.116
+rt-twitter-copen,Iinter_B_gnm,,0.086
+rt-occupywallst,Iinter_B_gnm,,0.063
+rt-tcot,Iinter_B_gnm,,0.093
+rt-libya,Iinter_B_gnm,,0.086
+rt-mittromney,Iinter_B_gnm,,0.077
+rt-lolgop,Iinter_B_gnm,,0.077
+tech-routers-rf,Iinter_B_gnm,,0.141
+tech-WHOIS,Iinter_B_gnm,,0.163
+web-polblogs,Iinter_B_gnm,,0.14
+web-edu,Iinter_B_gnm,,0.126
+web-EPA,Iinter_B_gnm,,0.129
+web-spam,Iinter_B_gnm,,0.161
+ca-netscience,Iinter_B_sbm,0.018,0.014
+ca-GrQc,Iinter_B_sbm,,0.078
+ca-Erdos992,Iinter_B_sbm,,0.077
+inf-USAir97,Iinter_B_sbm,0.045,0.05
+fb-pages-food,Iinter_B_sbm,,0.031
+soc-hamsterster,Iinter_B_sbm,,0.073
+fb-pages-tvshow,Iinter_B_sbm,,0.066
+soc-advogato,Iinter_B_sbm,,0.082
+fb-pages-politician,Iinter_B_sbm,,0.08
+fb-pages-government,Iinter_B_sbm,,0.067
+soc-wiki-elec,Iinter_B_sbm,,0.059
+Chilean grid (reduced),Iinter_B_sbm,,0.022
+Chilean grid (no tap),Iinter_B_sbm,,0.013
+Chilean grid (with tap),Iinter_B_sbm,,0.0077
+US airports (2010),Iinter_B_sbm,,0.021
+Openflights airports (2010),Iinter_B_sbm,,0.041
+Global air network (2023),Iinter_B_sbm,,0.04
+bio-celegans,Iinter_B_sbm,,0.061
+bio-SC-LC,Iinter_B_sbm,,0.076
+bio-WormNet-v3,Iinter_B_sbm,,0.049
+bio-DM-CX,Iinter_B_sbm,,0.01
+bn-mouse-brain-1,Iinter_B_sbm,,0.069
+bn-fly-drosophila-1,Iinter_B_sbm,,0.056
+eco-foodweb-baydry,Iinter_B_sbm,0.081,0.079
+eco-foodweb-baywet,Iinter_B_sbm,,0.076
+econ-mbeacxc,Iinter_B_sbm,,0.095
+econ-psmigr1,Iinter_B_sbm,,0.076
+socfb-Caltech36,Iinter_B_sbm,,0.068
+socfb-Williams40,Iinter_B_sbm,,0.05
+socfb-Mich67,Iinter_B_sbm,,0.044
+socfb-MIT,Iinter_B_sbm,,0.068
+socfb-Dartmouth6,Iinter_B_sbm,,0.037
+socfb-Duke14,Iinter_B_sbm,,0.037
+ia-infect-hyper,Iinter_B_sbm,,0.112
+ia-radoslaw-email,Iinter_B_sbm,0.073,0.081
+ia-primary-school,Iinter_B_sbm,0.071,0.068
+ia-email-univ,Iinter_B_sbm,,0.073
+ia-reality,Iinter_B_sbm,,0.08
+power-eris1176,Iinter_B_sbm,,0.028
+power-US-Grid,Iinter_B_sbm,,0.035
+power-bcspwr10,Iinter_B_sbm,,0.0037
+rt-twitter-copen,Iinter_B_sbm,,0.041
+rt-occupywallst,Iinter_B_sbm,,0.143
+rt-tcot,Iinter_B_sbm,,0.063
+rt-libya,Iinter_B_sbm,,0.063
+rt-mittromney,Iinter_B_sbm,,0.094
+rt-lolgop,Iinter_B_sbm,,0.135
+soc-wiki-Vote,Iinter_B_sbm,,0.047
+tech-routers-rf,Iinter_B_sbm,,0.066
+tech-WHOIS,Iinter_B_sbm,,0.066
+web-polblogs,Iinter_B_sbm,,0.038
+web-edu,Iinter_B_sbm,,0.106
+web-EPA,Iinter_B_sbm,,0.072
+web-spam,Iinter_B_sbm,,0.064
+ca-netscience,Iinter_B_real,0.015,0.014
+ca-GrQc,Iinter_B_real,,0.077
+ca-Erdos992,Iinter_B_real,,0.021
+inf-USAir97,Iinter_B_real,0.039,0.04
+fb-pages-tvshow,Iinter_B_real,,0.069
+soc-advogato,Iinter_B_real,,0.078
+fb-pages-politician,Iinter_B_real,,0.074
+fb-pages-government,Iinter_B_real,,0.065
+soc-wiki-elec,Iinter_B_real,,0.058
+Chilean grid (reduced),Iinter_B_real,,0.025
+Openflights airports (2010),Iinter_B_real,,0.037
+Global air network (2023),Iinter_B_real,,0.048
+bio-WormNet-v3,Iinter_B_real,,0.049
+bio-DM-CX,Iinter_B_real,,0.0073
+bn-macaque-rhesus-1,Iinter_B_real,0.052,0.051
+econ-psmigr1,Iinter_B_real,,0.053
+socfb-Williams40,Iinter_B_real,,0.048
+socfb-Mich67,Iinter_B_real,,0.024
+socfb-MIT,Iinter_B_real,,0.066
+socfb-Dartmouth6,Iinter_B_real,,0.035
+socfb-Duke14,Iinter_B_real,,0.035
+ia-radoslaw-email,Iinter_B_real,0.059,0.06
+ia-primary-school,Iinter_B_real,0.069,0.068
+ia-reality,Iinter_B_real,,0.063
+power-US-Grid,Iinter_B_real,,0.0039
+power-bcspwr10,Iinter_B_real,,0.0041
+rt-occupywallst,Iinter_B_real,,0.144
+rt-tcot,Iinter_B_real,,0.053
+rt-libya,Iinter_B_real,,0.053
+rt-mittromney,Iinter_B_real,,0.071
+rt-lolgop,Iinter_B_real,,0.136
+tech-routers-rf,Iinter_B_real,,0.06
+tech-WHOIS,Iinter_B_real,,0.067
+web-edu,Iinter_B_real,,0.134
+web-EPA,Iinter_B_real,,0.076
+web-spam,Iinter_B_real,,0.054
+ca-netscience,Iintra_B_gnm,0.102,0.101
+ca-GrQc,Iintra_B_gnm,,0.143
+ca-Erdos992,Iintra_B_gnm,,0.112
+fb-pages-food,Iintra_B_gnm,,0.139
+soc-hamsterster,Iintra_B_gnm,,0.161
+fb-pages-tvshow,Iintra_B_gnm,,0.15
+soc-advogato,Iintra_B_gnm,,0.16
+fb-pages-politician,Iintra_B_gnm,,0.163
+fb-pages-government,Iintra_B_gnm,,0.167
+soc-wiki-elec,Iintra_B_gnm,,0.171
+Chilean grid (reduced),Iintra_B_gnm,,0.102
+Chilean grid (no tap),Iintra_B_gnm,,0.036
+Chilean grid (with tap),Iintra_B_gnm,,0.046
+US airports (2010),Iintra_B_gnm,,0.101
+Openflights airports (2010),Iintra_B_gnm,,0.141
+Global air network (2023),Iintra_B_gnm,,0.132
+bio-celegans,Iintra_B_gnm,,0.144
+bio-SC-LC,Iintra_B_gnm,,0.162
+bio-WormNet-v3,Iintra_B_gnm,,0.172
+bio-DM-CX,Iintra_B_gnm,,0.167
+bn-mouse-brain-1,Iintra_B_gnm,,0.173
+bn-macaque-rhesus-1,Iintra_B_gnm,0.165,0.164
+bn-fly-drosophila-1,Iintra_B_gnm,,0.152
+eco-foodweb-baywet,Iintra_B_gnm,,0.173
+econ-mbeacxc,Iintra_B_gnm,,0.109
+econ-psmigr1,Iintra_B_gnm,,0.116
+socfb-Caltech36,Iintra_B_gnm,,0.172
+socfb-Williams40,Iintra_B_gnm,,0.173
+socfb-Mich67,Iintra_B_gnm,,0.169
+socfb-MIT,Iintra_B_gnm,,0.169
+socfb-Dartmouth6,Iintra_B_gnm,,0.17
+socfb-Duke14,Iintra_B_gnm,,0.17
+ia-infect-hyper,Iintra_B_gnm,,0.167
+ia-primary-school,Iintra_B_gnm,0.156,0.154
+ia-email-univ,Iintra_B_gnm,,0.151
+ia-reality,Iintra_B_gnm,,0.093
+power-eris1176,Iintra_B_gnm,,0.161
+power-US-Grid,Iintra_B_gnm,,0.107
+power-bcspwr10,Iintra_B_gnm,,0.115
+rt-twitter-copen,Iintra_B_gnm,,0.085
+rt-occupywallst,Iintra_B_gnm,,0.066
+rt-tcot,Iintra_B_gnm,,0.094
+rt-libya,Iintra_B_gnm,,0.085
+rt-mittromney,Iintra_B_gnm,,0.077
+rt-lolgop,Iintra_B_gnm,,0.078
+tech-routers-rf,Iintra_B_gnm,,0.14
+tech-WHOIS,Iintra_B_gnm,,0.163
+web-polblogs,Iintra_B_gnm,,0.141
+web-edu,Iintra_B_gnm,,0.126
+web-EPA,Iintra_B_gnm,,0.129
+web-spam,Iintra_B_gnm,,0.162
+ca-netscience,Iintra_B_sbm,0.145,0.066
+ca-GrQc,Iintra_B_sbm,,0.131
+ca-Erdos992,Iintra_B_sbm,,0.152
+inf-USAir97,Iintra_B_sbm,0.104,0.114
+fb-pages-food,Iintra_B_sbm,,0.206
+soc-hamsterster,Iintra_B_sbm,,0.34
+fb-pages-tvshow,Iintra_B_sbm,,0.3
+soc-advogato,Iintra_B_sbm,,0.144
+fb-pages-politician,Iintra_B_sbm,,0.411
+fb-pages-government,Iintra_B_sbm,,0.305
+soc-wiki-elec,Iintra_B_sbm,,0.278
+Chilean grid (reduced),Iintra_B_sbm,,0.171
+Chilean grid (no tap),Iintra_B_sbm,,0.08
+Chilean grid (with tap),Iintra_B_sbm,,0.064
+US airports (2010),Iintra_B_sbm,,0.033
+Openflights airports (2010),Iintra_B_sbm,,0.262
+Global air network (2023),Iintra_B_sbm,,0.196
+bio-celegans,Iintra_B_sbm,,0.202
+bio-SC-LC,Iintra_B_sbm,,0.268
+bio-WormNet-v3,Iintra_B_sbm,,0.679
+bio-DM-CX,Iintra_B_sbm,,0.039
+bn-mouse-brain-1,Iintra_B_sbm,,0.273
+bn-macaque-rhesus-1,Iintra_B_sbm,0.271,0.246
+bn-fly-drosophila-1,Iintra_B_sbm,,0.205
+eco-foodweb-baydry,Iintra_B_sbm,0.22,0.237
+eco-foodweb-baywet,Iintra_B_sbm,,0.239
+econ-mbeacxc,Iintra_B_sbm,,0.107
+econ-psmigr1,Iintra_B_sbm,,0.095
+socfb-Caltech36,Iintra_B_sbm,,0.291
+socfb-Williams40,Iintra_B_sbm,,0.3
+socfb-Mich67,Iintra_B_sbm,,0.201
+socfb-MIT,Iintra_B_sbm,,0.327
+socfb-Dartmouth6,Iintra_B_sbm,,0.222
+socfb-Duke14,Iintra_B_sbm,,0.234
+ia-infect-hyper,Iintra_B_sbm,,0.189
+ia-radoslaw-email,Iintra_B_sbm,0.242,0.235
+ia-primary-school,Iintra_B_sbm,0.398,0.379
+ia-email-univ,Iintra_B_sbm,,0.256
+ia-reality,Iintra_B_sbm,,0.137
+power-eris1176,Iintra_B_sbm,,0.276
+power-US-Grid,Iintra_B_sbm,,0.096
+power-bcspwr10,Iintra_B_sbm,,0.045
+rt-twitter-copen,Iintra_B_sbm,,0.09
+rt-occupywallst,Iintra_B_sbm,,0.178
+rt-tcot,Iintra_B_sbm,,0.078
+rt-libya,Iintra_B_sbm,,0.081
+rt-mittromney,Iintra_B_sbm,,0.101
+rt-lolgop,Iintra_B_sbm,,0.192
+soc-wiki-Vote,Iintra_B_sbm,,0.225
+tech-routers-rf,Iintra_B_sbm,,0.195
+tech-WHOIS,Iintra_B_sbm,,0.205
+web-polblogs,Iintra_B_sbm,,0.156
+web-edu,Iintra_B_sbm,,0.223
+web-EPA,Iintra_B_sbm,,0.128
+web-spam,Iintra_B_sbm,,0.233
+ca-netscience,Iintra_B_real,0.163,0.139
+ca-GrQc,Iintra_B_real,,0.118
+ca-Erdos992,Iintra_B_real,,0.059
+inf-USAir97,Iintra_B_real,0.085,0.093
+fb-pages-tvshow,Iintra_B_real,,0.519
+soc-advogato,Iintra_B_real,,0.128
+fb-pages-politician,Iintra_B_real,,0.388
+fb-pages-government,Iintra_B_real,,0.274
+soc-wiki-elec,Iintra_B_real,,0.251
+Chilean grid (reduced),Iintra_B_real,,0.207
+Openflights airports (2010),Iintra_B_real,,0.608
+Global air network (2023),Iintra_B_real,,0.42
+bio-WormNet-v3,Iintra_B_real,,0.862
+bio-DM-CX,Iintra_B_real,,0.024
+bn-macaque-rhesus-1,Iintra_B_real,0.168,0.166
+bn-fly-drosophila-1,Iintra_B_real,0.178,0.179
+eco-foodweb-baydry,Iintra_B_real,0.105,0.114
+eco-foodweb-baywet,Iintra_B_real,0.193,0.192
+econ-psmigr1,Iintra_B_real,,0.281
+socfb-Williams40,Iintra_B_real,,0.195
+socfb-Mich67,Iintra_B_real,,0.07
+socfb-MIT,Iintra_B_real,,0.222
+socfb-Dartmouth6,Iintra_B_real,,0.149
+socfb-Duke14,Iintra_B_real,,0.154
+ia-radoslaw-email,Iintra_B_real,0.164,0.152
+ia-primary-school,Iintra_B_real,0.189,0.194
+ia-email-univ,Iintra_B_real,0.218,0.219
+ia-reality,Iintra_B_real,,0.102
+power-eris1176,Iintra_B_real,0.318,0.315
+power-US-Grid,Iintra_B_real,,0.013
+power-bcspwr10,Iintra_B_real,,0.038
+rt-occupywallst,Iintra_B_real,,0.179
+rt-tcot,Iintra_B_real,,0.074
+rt-libya,Iintra_B_real,,0.068
+rt-mittromney,Iintra_B_real,,0.09
+rt-lolgop,Iintra_B_real,,0.192
+tech-routers-rf,Iintra_B_real,,0.203
+tech-WHOIS,Iintra_B_real,,0.214
+web-edu,Iintra_B_real,,0.214
+web-EPA,Iintra_B_real,,0.124
+web-spam,Iintra_B_real,,0.167
+ca-netscience,Iinter_Bdc_deg,0.091,0.092
+ca-GrQc,Iinter_Bdc_deg,,0.117
+ca-Erdos992,Iinter_Bdc_deg,,0.071
+inf-USAir97,Iinter_Bdc_deg,0.061,0.062
+fb-pages-food,Iinter_Bdc_deg,,0.1
+soc-hamsterster,Iinter_Bdc_deg,,0.126
+fb-pages-tvshow,Iinter_Bdc_deg,,0.125
+soc-advogato,Iinter_Bdc_deg,,0.107
+fb-pages-politician,Iinter_Bdc_deg,,0.127
+fb-pages-government,Iinter_Bdc_deg,,0.128
+soc-wiki-elec,Iinter_Bdc_deg,,0.098
+Chilean grid (reduced),Iinter_Bdc_deg,,0.087
+Chilean grid (no tap),Iinter_Bdc_deg,,0.051
+Chilean grid (with tap),Iinter_Bdc_deg,,0.04
+US airports (2010),Iinter_Bdc_deg,,0.029
+Openflights airports (2010),Iinter_Bdc_deg,,0.089
+Global air network (2023),Iinter_Bdc_deg,,0.078
+bio-celegans,Iinter_Bdc_deg,,0.096
+bio-SC-LC,Iinter_Bdc_deg,,0.12
+bio-WormNet-v3,Iinter_Bdc_deg,,0.14
+bio-DM-CX,Iinter_Bdc_deg,,0.123
+bn-fly-drosophila-1,Iinter_Bdc_deg,,0.097
+ENZYMES-g297,Iinter_Bdc_deg,,0.041
+eco-foodweb-baywet,Iinter_Bdc_deg,,0.145
+econ-mbeacxc,Iinter_Bdc_deg,,0.088
+econ-psmigr1,Iinter_Bdc_deg,,0.078
+socfb-Caltech36,Iinter_Bdc_deg,,0.133
+socfb-Williams40,Iinter_Bdc_deg,,0.141
+socfb-Mich67,Iinter_Bdc_deg,,0.131
+socfb-MIT,Iinter_Bdc_deg,,0.12
+socfb-Dartmouth6,Iinter_Bdc_deg,,0.123
+socfb-Duke14,Iinter_Bdc_deg,,0.119
+ia-email-univ,Iinter_Bdc_deg,,0.124
+ia-reality,Iinter_Bdc_deg,,0.032
+power-eris1176,Iinter_Bdc_deg,,0.123
+power-US-Grid,Iinter_Bdc_deg,,0.104
+power-bcspwr10,Iinter_Bdc_deg,,0.114
+rt-twitter-copen,Iinter_Bdc_deg,,0.084
+rt-occupywallst,Iinter_Bdc_deg,,0.175
+rt-tcot,Iinter_Bdc_deg,,0.059
+rt-libya,Iinter_Bdc_deg,,0.053
+rt-mittromney,Iinter_Bdc_deg,,0.09
+rt-lolgop,Iinter_Bdc_deg,,0.185
+tech-routers-rf,Iinter_Bdc_deg,,0.116
+tech-WHOIS,Iinter_Bdc_deg,,0.126
+web-polblogs,Iinter_Bdc_deg,,0.09
+web-edu,Iinter_Bdc_deg,,0.111
+web-EPA,Iinter_Bdc_deg,,0.102
+web-spam,Iinter_Bdc_deg,,0.122
+ca-netscience,Iinter_Bdc_dcsbm,0.023,0.015
+ca-GrQc,Iinter_Bdc_dcsbm,,0.083
+ca-Erdos992,Iinter_Bdc_dcsbm,,0.067
+inf-USAir97,Iinter_Bdc_dcsbm,0.049,0.051
+fb-pages-food,Iinter_Bdc_dcsbm,,0.044
+soc-hamsterster,Iinter_Bdc_dcsbm,,0.074
+fb-pages-tvshow,Iinter_Bdc_dcsbm,,0.071
+soc-advogato,Iinter_Bdc_dcsbm,,0.084
+fb-pages-politician,Iinter_Bdc_dcsbm,,0.076
+fb-pages-government,Iinter_Bdc_dcsbm,,0.066
+soc-wiki-elec,Iinter_Bdc_dcsbm,,0.068
+Chilean grid (reduced),Iinter_Bdc_dcsbm,,0.024
+Chilean grid (no tap),Iinter_Bdc_dcsbm,,0.0052
+Chilean grid (with tap),Iinter_Bdc_dcsbm,,0.014
+US airports (2010),Iinter_Bdc_dcsbm,,0.021
+Openflights airports (2010),Iinter_Bdc_dcsbm,,0.032
+Global air network (2023),Iinter_Bdc_dcsbm,,0.038
+bio-celegans,Iinter_Bdc_dcsbm,,0.062
+bio-SC-LC,Iinter_Bdc_dcsbm,,0.078
+bio-WormNet-v3,Iinter_Bdc_dcsbm,,0.048
+bio-DM-CX,Iinter_Bdc_dcsbm,,0.0089
+bn-macaque-rhesus-1,Iinter_Bdc_dcsbm,0.042,0.037
+bn-fly-drosophila-1,Iinter_Bdc_dcsbm,,0.061
+ENZYMES-g297,Iinter_Bdc_dcsbm,,0.019
+eco-foodweb-baydry,Iinter_Bdc_dcsbm,0.063,0.082
+eco-foodweb-baywet,Iinter_Bdc_dcsbm,,0.099
+econ-mbeacxc,Iinter_Bdc_dcsbm,,0.089
+econ-psmigr1,Iinter_Bdc_dcsbm,,0.07
+socfb-Caltech36,Iinter_Bdc_dcsbm,,0.073
+socfb-Williams40,Iinter_Bdc_dcsbm,,0.05
+socfb-Mich67,Iinter_Bdc_dcsbm,,0.035
+socfb-MIT,Iinter_Bdc_dcsbm,,0.068
+socfb-Dartmouth6,Iinter_Bdc_dcsbm,,0.038
+socfb-Duke14,Iinter_Bdc_dcsbm,,0.036
+ia-primary-school,Iinter_Bdc_dcsbm,0.072,0.061
+ia-email-univ,Iinter_Bdc_dcsbm,,0.073
+ia-reality,Iinter_Bdc_dcsbm,,0.047
+power-eris1176,Iinter_Bdc_dcsbm,,0.035
+power-US-Grid,Iinter_Bdc_dcsbm,,0.039
+power-bcspwr10,Iinter_Bdc_dcsbm,,0.013
+rt-twitter-copen,Iinter_Bdc_dcsbm,,0.041
+rt-occupywallst,Iinter_Bdc_dcsbm,,0.119
+rt-tcot,Iinter_Bdc_dcsbm,,0.072
+rt-libya,Iinter_Bdc_dcsbm,,0.064
+rt-mittromney,Iinter_Bdc_dcsbm,,0.087
+rt-lolgop,Iinter_Bdc_dcsbm,,0.142
+soc-wiki-Vote,Iinter_Bdc_dcsbm,,0.041
+tech-routers-rf,Iinter_Bdc_dcsbm,,0.064
+tech-WHOIS,Iinter_Bdc_dcsbm,,0.066
+web-polblogs,Iinter_Bdc_dcsbm,,0.034
+web-edu,Iinter_Bdc_dcsbm,,0.12
+web-EPA,Iinter_Bdc_dcsbm,,0.097
+web-spam,Iinter_Bdc_dcsbm,,0.052
+ca-GrQc,Iinter_Bdc_real,,0.085
+ca-Erdos992,Iinter_Bdc_real,,0.022
+fb-pages-tvshow,Iinter_Bdc_real,,0.069
+soc-advogato,Iinter_Bdc_real,,0.083
+fb-pages-politician,Iinter_Bdc_real,,0.074
+fb-pages-government,Iinter_Bdc_real,,0.065
+soc-wiki-elec,Iinter_Bdc_real,,0.066
+Chilean grid (reduced),Iinter_Bdc_real,,0.026
+Openflights airports (2010),Iinter_Bdc_real,,0.038
+Global air network (2023),Iinter_Bdc_real,,0.047
+bio-WormNet-v3,Iinter_Bdc_real,,0.049
+bio-DM-CX,Iinter_Bdc_real,,0.0074
+eco-foodweb-baywet,Iinter_Bdc_real,0.058,0.057
+econ-psmigr1,Iinter_Bdc_real,,0.053
+socfb-Williams40,Iinter_Bdc_real,,0.048
+socfb-Mich67,Iinter_Bdc_real,,0.024
+socfb-MIT,Iinter_Bdc_real,,0.066
+socfb-Dartmouth6,Iinter_Bdc_real,,0.035
+socfb-Duke14,Iinter_Bdc_real,,0.035
+ia-radoslaw-email,Iinter_Bdc_real,0.052,0.053
+ia-reality,Iinter_Bdc_real,,0.043
+power-US-Grid,Iinter_Bdc_real,,0.0041
+power-bcspwr10,Iinter_Bdc_real,,0.0041
+rt-occupywallst,Iinter_Bdc_real,,0.118
+rt-tcot,Iinter_Bdc_real,,0.064
+rt-libya,Iinter_Bdc_real,,0.055
+rt-mittromney,Iinter_Bdc_real,,0.071
+rt-lolgop,Iinter_Bdc_real,,0.145
+tech-routers-rf,Iinter_Bdc_real,,0.063
+tech-WHOIS,Iinter_Bdc_real,,0.067
+web-edu,Iinter_Bdc_real,,0.134
+web-EPA,Iinter_Bdc_real,,0.077
+web-spam,Iinter_Bdc_real,,0.052
+ca-netscience,Iintra_Bdc_deg,0.096,0.095
+ca-GrQc,Iintra_Bdc_deg,,0.147
+ca-Erdos992,Iintra_Bdc_deg,,0.136
+inf-USAir97,Iintra_Bdc_deg,0.073,0.071
+fb-pages-food,Iintra_Bdc_deg,,0.108
+soc-hamsterster,Iintra_Bdc_deg,,0.162
+fb-pages-tvshow,Iintra_Bdc_deg,,0.15
+soc-advogato,Iintra_Bdc_deg,,0.17
+fb-pages-politician,Iintra_Bdc_deg,,0.162
+fb-pages-government,Iintra_Bdc_deg,,0.159
+soc-wiki-elec,Iintra_Bdc_deg,,0.165
+Chilean grid (reduced),Iintra_Bdc_deg,,0.104
+Chilean grid (no tap),Iintra_Bdc_deg,,0.05
+Chilean grid (with tap),Iintra_Bdc_deg,,0.046
+US airports (2010),Iintra_Bdc_deg,,0.029
+Openflights airports (2010),Iintra_Bdc_deg,,0.105
+Global air network (2023),Iintra_Bdc_deg,,0.092
+bio-celegans,Iintra_Bdc_deg,,0.107
+bio-SC-LC,Iintra_Bdc_deg,,0.179
+bio-WormNet-v3,Iintra_Bdc_deg,,0.217
+bio-DM-CX,Iintra_Bdc_deg,,0.153
+bn-fly-drosophila-1,Iintra_Bdc_deg,,0.114
+ENZYMES-g297,Iintra_Bdc_deg,,0.045
+eco-foodweb-baydry,Iintra_Bdc_deg,0.173,0.174
+eco-foodweb-baywet,Iintra_Bdc_deg,,0.173
+econ-mbeacxc,Iintra_Bdc_deg,,0.096
+econ-psmigr1,Iintra_Bdc_deg,,0.089
+socfb-Caltech36,Iintra_Bdc_deg,,0.159
+socfb-Williams40,Iintra_Bdc_deg,,0.169
+socfb-Mich67,Iintra_Bdc_deg,,0.167
+socfb-MIT,Iintra_Bdc_deg,,0.164
+socfb-Dartmouth6,Iintra_Bdc_deg,,0.157
+socfb-Duke14,Iintra_Bdc_deg,,0.162
+ia-primary-school,Iintra_Bdc_deg,0.159,0.161
+ia-email-univ,Iintra_Bdc_deg,,0.14
+ia-reality,Iintra_Bdc_deg,,0.145
+power-eris1176,Iintra_Bdc_deg,,0.181
+power-US-Grid,Iintra_Bdc_deg,,0.107
+power-bcspwr10,Iintra_Bdc_deg,,0.116
+rt-twitter-copen,Iintra_Bdc_deg,,0.081
+rt-occupywallst,Iintra_Bdc_deg,,0.181
+rt-tcot,Iintra_Bdc_deg,,0.077
+rt-libya,Iintra_Bdc_deg,,0.071
+rt-mittromney,Iintra_Bdc_deg,,0.103
+rt-lolgop,Iintra_Bdc_deg,,0.195
+tech-routers-rf,Iintra_Bdc_deg,,0.129
+tech-WHOIS,Iintra_Bdc_deg,,0.169
+web-polblogs,Iintra_Bdc_deg,,0.12
+web-edu,Iintra_Bdc_deg,,0.126
+web-EPA,Iintra_Bdc_deg,,0.141
+web-spam,Iintra_Bdc_deg,,0.176
+ca-netscience,Iintra_Bdc_dcsbm,0.134,0.087
+ca-GrQc,Iintra_Bdc_dcsbm,,0.114
+ca-Erdos992,Iintra_Bdc_dcsbm,,0.154
+inf-USAir97,Iintra_Bdc_dcsbm,0.093,0.088
+fb-pages-food,Iintra_Bdc_dcsbm,,0.197
+soc-hamsterster,Iintra_Bdc_dcsbm,,0.367
+fb-pages-tvshow,Iintra_Bdc_dcsbm,,0.498
+soc-advogato,Iintra_Bdc_dcsbm,,0.135
+fb-pages-politician,Iintra_Bdc_dcsbm,,0.391
+fb-pages-government,Iintra_Bdc_dcsbm,,0.245
+soc-wiki-elec,Iintra_Bdc_dcsbm,,0.308
+Chilean grid (reduced),Iintra_Bdc_dcsbm,,0.202
+Chilean grid (no tap),Iintra_Bdc_dcsbm,,0.062
+Chilean grid (with tap),Iintra_Bdc_dcsbm,,0.059
+US airports (2010),Iintra_Bdc_dcsbm,,0.031
+Openflights airports (2010),Iintra_Bdc_dcsbm,,0.142
+Global air network (2023),Iintra_Bdc_dcsbm,,0.157
+bio-celegans,Iintra_Bdc_dcsbm,,0.15
+bio-SC-LC,Iintra_Bdc_dcsbm,,0.288
+bio-WormNet-v3,Iintra_Bdc_dcsbm,,0.914
+bio-DM-CX,Iintra_Bdc_dcsbm,,0.019
+bn-macaque-rhesus-1,Iintra_Bdc_dcsbm,0.182,0.144
+bn-fly-drosophila-1,Iintra_Bdc_dcsbm,,0.134
+ENZYMES-g297,Iintra_Bdc_dcsbm,,0.05
+eco-foodweb-baydry,Iintra_Bdc_dcsbm,0.185,0.228
+eco-foodweb-baywet,Iintra_Bdc_dcsbm,,0.23
+econ-mbeacxc,Iintra_Bdc_dcsbm,,0.1
+econ-psmigr1,Iintra_Bdc_dcsbm,,0.084
+socfb-Caltech36,Iintra_Bdc_dcsbm,,0.19
+socfb-Williams40,Iintra_Bdc_dcsbm,,0.18
+socfb-Mich67,Iintra_Bdc_dcsbm,,0.099
+socfb-MIT,Iintra_Bdc_dcsbm,,0.214
+socfb-Dartmouth6,Iintra_Bdc_dcsbm,,0.14
+socfb-Duke14,Iintra_Bdc_dcsbm,,0.123
+ia-radoslaw-email,Iintra_Bdc_dcsbm,0.167,0.166
+ia-primary-school,Iintra_Bdc_dcsbm,0.325,0.29
+ia-email-univ,Iintra_Bdc_dcsbm,,0.201
+ia-reality,Iintra_Bdc_dcsbm,,0.137
+power-eris1176,Iintra_Bdc_dcsbm,,0.451
+power-US-Grid,Iintra_Bdc_dcsbm,,0.121
+power-bcspwr10,Iintra_Bdc_dcsbm,,0.154
+rt-twitter-copen,Iintra_Bdc_dcsbm,,0.097
+rt-occupywallst,Iintra_Bdc_dcsbm,,0.206
+rt-tcot,Iintra_Bdc_dcsbm,,0.082
+rt-libya,Iintra_Bdc_dcsbm,,0.08
+rt-mittromney,Iintra_Bdc_dcsbm,,0.098
+rt-lolgop,Iintra_Bdc_dcsbm,,0.202
+soc-wiki-Vote,Iintra_Bdc_dcsbm,,0.158
+tech-routers-rf,Iintra_Bdc_dcsbm,,0.187
+tech-WHOIS,Iintra_Bdc_dcsbm,,0.179
+web-polblogs,Iintra_Bdc_dcsbm,,0.15
+web-edu,Iintra_Bdc_dcsbm,,0.271
+web-EPA,Iintra_Bdc_dcsbm,,0.174
+web-spam,Iintra_Bdc_dcsbm,,0.148
+ca-netscience,Iintra_Bdc_real,0.118,0.138
+ca-GrQc,Iintra_Bdc_real,,0.106
+ca-Erdos992,Iintra_Bdc_real,,0.06
+fb-pages-tvshow,Iintra_Bdc_real,,0.51
+soc-advogato,Iintra_Bdc_real,,0.127
+fb-pages-politician,Iintra_Bdc_real,,0.316
+fb-pages-government,Iintra_Bdc_real,,0.242
+soc-wiki-elec,Iintra_Bdc_real,,0.295
+Chilean grid (reduced),Iintra_Bdc_real,,0.225
+US airports (2010),Iintra_Bdc_real,0.028,0.027
+Openflights airports (2010),Iintra_Bdc_real,,0.459
+Global air network (2023),Iintra_Bdc_real,,0.341
+bio-WormNet-v3,Iintra_Bdc_real,,0.845
+bio-DM-CX,Iintra_Bdc_real,,0.015
+bn-macaque-rhesus-1,Iintra_Bdc_real,0.167,0.158
+eco-foodweb-baydry,Iintra_Bdc_real,0.104,0.109
+econ-psmigr1,Iintra_Bdc_real,,0.252
+socfb-Williams40,Iintra_Bdc_real,,0.155
+socfb-Mich67,Iintra_Bdc_real,,0.051
+socfb-MIT,Iintra_Bdc_real,,0.184
+socfb-Dartmouth6,Iintra_Bdc_real,,0.118
+socfb-Duke14,Iintra_Bdc_real,,0.111
+ia-radoslaw-email,Iintra_Bdc_real,0.123,0.124
+ia-primary-school,Iintra_Bdc_real,0.192,0.195
+ia-email-univ,Iintra_Bdc_real,0.191,0.192
+ia-reality,Iintra_Bdc_real,,0.102
+power-eris1176,Iintra_Bdc_real,0.233,0.231
+power-US-Grid,Iintra_Bdc_real,,0.0076
+power-bcspwr10,Iintra_Bdc_real,,0.031
+rt-occupywallst,Iintra_Bdc_real,,0.208
+rt-tcot,Iintra_Bdc_real,,0.073
+rt-libya,Iintra_Bdc_real,,0.068
+rt-mittromney,Iintra_Bdc_real,,0.091
+rt-lolgop,Iintra_Bdc_real,,0.202
+tech-routers-rf,Iintra_Bdc_real,,0.166
+tech-WHOIS,Iintra_Bdc_real,,0.192
+web-polblogs,Iintra_Bdc_real,0.131,0.13
+web-edu,Iintra_Bdc_real,,0.21
+web-EPA,Iintra_Bdc_real,,0.135
+web-spam,Iintra_Bdc_real,,0.127
