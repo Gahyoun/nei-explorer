@@ -52,7 +52,10 @@ button:hover { border-color: var(--accent); }
 .layers li.dim label { opacity: .45; }
 .grp { font-weight: 600; margin-top: 6px; }
 .grpbtns { display: flex; gap: 6px; margin: 4px 0 6px; }
-#plot { width: 100%; height: min(78vh, 760px); min-height: 420px; }
+.plotbox { width: min(100%, calc(100vh - 150px)); min-width: 300px; }
+#plot { width: 100%; aspect-ratio: 1 / 1; }
+.range { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 4px 6px; align-items: center; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+.range input { width: 100%; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--text); font: inherit; font-size: 12.5px; }
 .stats { font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; padding: 2px 4px 6px; }
 .stats b { color: var(--text); font-weight: 600; }
 #detail { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 10px; font-size: 13px; }
@@ -67,7 +70,7 @@ a { color: var(--accent); }
   .wrap { grid-template-columns: 1fr; }
   aside { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); }
   header, main { padding-left: 16px; padding-right: 16px; }
-  #plot { height: 70vh; }
+  .plotbox { width: 100%; min-width: 0; }
 }
 </style>
 </head>
@@ -83,11 +86,15 @@ a { color: var(--accent); }
   <label class="ax" for="xsel">x axis</label>
   <select id="xsel"></select>
   <div class="row"><label><input type="checkbox" id="xlog"> log x</label></div>
+  <div class="range"><span>min</span><input id="xmin" inputmode="decimal" placeholder="auto"><span>max</span><input id="xmax" inputmode="decimal" placeholder="auto"></div>
   <div class="desc" id="xdesc"></div>
   <label class="ax" for="ysel">y axis</label>
   <select id="ysel"></select>
   <div class="row"><label><input type="checkbox" id="ylog"> log y</label><button id="swap" title="Swap x and y">⇄ swap</button></div>
+  <div class="range"><span>min</span><input id="ymin" inputmode="decimal" placeholder="auto"><span>max</span><input id="ymax" inputmode="decimal" placeholder="auto"></div>
   <div class="desc" id="ydesc"></div>
+  <div class="row"><label><input type="checkbox" id="same" checked> same range on x and y</label><button id="autor">auto range</button></div>
+  <p class="hint" style="margin:4px 0 0">Range: a number such as 0.03, 1e-2 or 10^-1.5. Empty = automatic.</p>
 
   <h2>Presets</h2>
   <div class="presets" id="presets"></div>
@@ -108,7 +115,7 @@ a { color: var(--accent); }
 </aside>
 <main>
   <div class="stats" id="stats"></div>
-  <div id="plot"></div>
+  <div class="plotbox"><div id="plot"></div></div>
   <div id="detail"><span class="hint">No network selected.</span></div>
 </main>
 </div>
@@ -121,7 +128,8 @@ a { color: var(--accent); }
   const CATS = D.categories;
   const CAT = Object.fromEntries(CATS.map(c => [c.key, c]));
   const ROWS = D.rows;
-  const state = { x: "C_deg", y: "C_gnm", xlog: true, ylog: true, on: {}, find: "", picked: null };
+  const state = { x: "C_deg", y: "C_gnm", xlog: true, ylog: true, on: {}, find: "", picked: null,
+    xr: [null, null], yr: [null, null], same: true };
   CATS.forEach(c => state.on[c.key] = true);
 
   // manuscript marker macro -> plotly symbol
@@ -211,11 +219,16 @@ a { color: var(--accent); }
 
   function setAxes(x, y) {
     state.x = x; state.y = y; state.xlog = VARS[x].log; state.ylog = VARS[y].log;
+    state.xr = [null, null]; state.yr = [null, null];
     sync(); draw(); writeHash();
   }
   function sync() {
     document.getElementById("xsel").value = state.x; document.getElementById("ysel").value = state.y;
     document.getElementById("xlog").checked = state.xlog; document.getElementById("ylog").checked = state.ylog;
+    document.getElementById("same").checked = state.same;
+    const show = v => v == null ? "" : String(+v.toPrecision(4));
+    document.getElementById("xmin").value = show(state.xr[0]); document.getElementById("xmax").value = show(state.xr[1]);
+    document.getElementById("ymin").value = show(state.yr[0]); document.getElementById("ymax").value = show(state.yr[1]);
     document.getElementById("xdesc").textContent = VARS[state.x].desc + " · " + VARS[state.x].source;
     document.getElementById("ydesc").textContent = VARS[state.y].desc + " · " + VARS[state.y].source;
   }
@@ -225,6 +238,17 @@ a { color: var(--accent); }
   document.getElementById("ylog").onchange = e => { state.ylog = e.target.checked; draw(); writeHash(); };
   document.getElementById("swap").onclick = () => { const { x, y, xlog, ylog } = state; state.x = y; state.y = x; state.xlog = ylog; state.ylog = xlog; sync(); draw(); writeHash(); };
   ["ref_diag", "ref_one", "ref_sig"].forEach(id => document.getElementById(id).onchange = draw);
+  function parseNum(s) { s = s.trim().replace(/\s+/g, ""); if (!s) return null;
+    const m = s.match(/^10\^\(?(-?[\d.]+)\)?$/); const v = m ? Math.pow(10, +m[1]) : Number(s); return isFinite(v) ? v : null; }
+  function onRange(e) {
+    const id = e.target.id, ax = id[0], k = id.endsWith("min") ? 0 : 1;
+    state[ax + "r"][k] = parseNum(e.target.value);
+    if (state.same) { const o = ax === "x" ? "y" : "x"; state[o + "r"][k] = state[ax + "r"][k];
+      document.getElementById(o + (k ? "max" : "min")).value = e.target.value; }
+    draw(); writeHash(); }
+  ["xmin", "xmax", "ymin", "ymax"].forEach(id => document.getElementById(id).addEventListener("change", onRange));
+  document.getElementById("same").onchange = e => { state.same = e.target.checked; draw(); writeHash(); };
+  document.getElementById("autor").onclick = () => { state.xr = [null, null]; state.yr = [null, null]; sync(); draw(); writeHash(); };
   document.getElementById("find").addEventListener("input", e => {
     const v = e.target.value.trim(); const hit = ROWS.find(r => r.network === v);
     state.find = hit ? v : ""; if (hit) showDetail(hit); draw(); });
@@ -272,7 +296,7 @@ a { color: var(--accent); }
         customdata: ok.map(r => r.network),
         text: ok.map(r => `<b>${r.network}</b><br>${c.name} · N=${fmt(r.N)}, E=${fmt(r.E)}<br>${strip(VARS[X].label)} = ${fmt(r[X])}<br>${strip(VARS[Y].label)} = ${fmt(r[Y])}`),
         hovertemplate: "%{text}<extra></extra>",
-        marker: { symbol: SYM[c.shape], color: c.color, opacity: 0.85, size: SIZE[c.shape] || 9,
+        marker: { symbol: SYM[c.shape], color: c.color, opacity: 0.65, size: SIZE[c.shape] || 9,
           line: { width: ok.map(r => sig && r.BH_deg ? 1.6 : 0), color: css("--hl") } }
       });
     }
@@ -287,7 +311,7 @@ a { color: var(--accent); }
     const xs = all.map(r => r[X]), ys = all.map(r => r[Y]);
     const shapes = [];
     if (xs.length) {
-      const lo = Math.min(...xs, ...ys), hi = Math.max(...xs, ...ys);
+      const lo = Math.min(...xs, ...ys) / 1e3, hi = Math.max(...xs, ...ys) * 1e3;
       if (document.getElementById("ref_diag").checked)
         shapes.push({ type: "line", xref: "x", yref: "y", x0: lo, y0: lo, x1: hi, y1: hi, line: { color: css("--ref"), width: 1.2, dash: "dash" }, layer: "below" });
       if (document.getElementById("ref_one").checked) {
@@ -300,10 +324,29 @@ a { color: var(--accent); }
       dtick: log ? (decades(k === X ? xs : ys) >= 1.5 ? 1 : "D2") : undefined,
       gridcolor: css("--grid"), zeroline: false, linecolor: css("--line"), mirror: true, ticks: "inside",
       exponentformat: "power", automargin: true });
+    // ranges: user values, else automatic; "same range" uses the union of x and y over the data when both axes share a scale
+    const pad = (lo, hi, log) => log ? [Math.log10(lo) - 0.08 * Math.log10(hi / lo || 10), Math.log10(hi) + 0.08 * Math.log10(hi / lo || 10)]
+                                     : [lo - 0.05 * ((hi - lo) || 1), hi + 0.05 * ((hi - lo) || 1)];
+    function autoRange(vals, log) { const v = vals.filter(q => valid(q, log)); if (!v.length) return null;
+      const lo = Math.min(...v), hi = Math.max(...v);
+      if (log) { const a = Math.floor((Math.log10(lo) - 0.08) * 2) / 2, b = Math.ceil((Math.log10(hi) + 0.08) * 2) / 2; return b > a ? [a, b] : pad(lo, hi, true); }
+      return pad(lo, hi, false); }
+    let xR = autoRange(xs, state.xlog), yR = autoRange(ys, state.ylog);
+    if (state.same && state.xlog === state.ylog && xR && yR) { const u = [Math.min(xR[0], yR[0]), Math.max(xR[1], yR[1])]; xR = u.slice(); yR = u.slice(); }
+    const conv = (v, log) => v == null ? null : (log ? (v > 0 ? Math.log10(v) : null) : v);
+    const user = (r, log, R) => { if (!R) return R; const a = conv(r[0], log), b = conv(r[1], log); return [a ?? R[0], b ?? R[1]]; };
+    xR = user(state.xr, state.xlog, xR); yR = user(state.yr, state.ylog, yR);
+    const fromAx = (R, log) => R ? R.map(v => log ? Math.pow(10, v) : v) : [null, null];
+    const [xa, xb] = fromAx(xR, state.xlog), [ya, yb] = fromAx(yR, state.ylog);
+    const ph = v => v == null ? "auto" : String(+v.toPrecision(3));
+    document.getElementById("xmin").placeholder = ph(xa); document.getElementById("xmax").placeholder = ph(xb);
+    document.getElementById("ymin").placeholder = ph(ya); document.getElementById("ymax").placeholder = ph(yb);
     const layout = {
       paper_bgcolor: css("--bg"), plot_bgcolor: css("--bg"), font: { color: css("--text"), family: "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" },
-      xaxis: axis(X, state.xlog), yaxis: axis(Y, state.ylog), shapes, showlegend: false,
-      margin: { l: 70, r: 20, t: 16, b: 60 }, hovermode: "closest",
+      xaxis: Object.assign(axis(X, state.xlog), xR ? { range: xR, autorange: false } : {}),
+      yaxis: Object.assign(axis(Y, state.ylog), yR ? { range: yR, autorange: false } : {}),
+      shapes, showlegend: false,
+      margin: { l: 78, r: 28, t: 36, b: 70, autoexpand: false }, hovermode: "closest",
       hoverlabel: { bgcolor: css("--panel"), bordercolor: css("--line"), font: { color: css("--text") } }
     };
     Plotly.react(plotEl, traces, layout, { responsive: true, displaylogo: false,
@@ -335,10 +378,14 @@ a { color: var(--accent); }
     if (r) { showDetail(r); draw(); } }); }
 
   // ---------- url state ----------
-  function writeHash() { try { history.replaceState(null, "", `#x=${state.x}&y=${state.y}&lx=${+state.xlog}&ly=${+state.ylog}`); } catch (e) {} }
+  function writeHash() { const r = a => a.map(v => v == null ? "" : +v.toPrecision(4)).join("_");
+    try { history.replaceState(null, "", `#x=${state.x}&y=${state.y}&lx=${+state.xlog}&ly=${+state.ylog}&xr=${r(state.xr)}&yr=${r(state.yr)}&same=${+state.same}`); } catch (e) {} }
   function readHash() { const h = new URLSearchParams(location.hash.slice(1));
     if (VARS[h.get("x")]) state.x = h.get("x"); if (VARS[h.get("y")]) state.y = h.get("y");
-    state.xlog = h.has("lx") ? h.get("lx") === "1" : VARS[state.x].log; state.ylog = h.has("ly") ? h.get("ly") === "1" : VARS[state.y].log; }
+    state.xlog = h.has("lx") ? h.get("lx") === "1" : VARS[state.x].log; state.ylog = h.has("ly") ? h.get("ly") === "1" : VARS[state.y].log;
+    const rr = s => (s || "_").split("_").map(v => v === "" ? null : (isFinite(+v) ? +v : null));
+    if (h.has("xr")) state.xr = rr(h.get("xr")); if (h.has("yr")) state.yr = rr(h.get("yr"));
+    if (h.has("same")) state.same = h.get("same") === "1"; }
 
   readHash(); sync(); draw(); bindClick();
 })();
