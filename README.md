@@ -5,7 +5,13 @@ Interactive scatter of every tabulated index of the 165 networks (63 non-road, 1
 
 **Open `index.html`** (or the GitHub Pages site) to:
 
-- choose any index for the x and y axes, with log or linear scales and presets for the figures of the paper;
+- choose any index for the x and y axes, with log or linear scales and a min/max range per axis
+  (`0.03`, `1e-2` or `10^-1.5`; optionally the same range on both axes); the plot area is square;
+- start from **recommended axes**: 15 physically meaningful pairs (null contrasts, real vs each null,
+  degree correction inside blocks, intra- vs inter-module scatter, density, concentration, finite-M convergence),
+  each with the layers and reference lines it needs and a note on how to read it;
+- **export PNG or PDF** of exactly what is on screen (axes, range or zoom, visible layers), on a white background
+  with an optional legend and footnote (PNG at 4×, PDF at 360 dpi);
 - switch category layers on and off (20 categories with the manuscript markers and colours of SM Sec. I),
   per group (non-road / road) or one at a time;
 - show the reference layers y = x and x = 1, y = 1, and outline the BH-significant networks;
@@ -39,4 +45,4 @@ jupyter nbconvert --to notebook --execute --inplace build_data.ipynb
 Set `TEX` and `PDF` in the first code cell to the manuscript files. The notebook stops if a category count differs
 from the SM text, if a row cannot be found in the PDF, or if the tabulated ratios disagree.
 
-Plotly.js 2.35.2 is loaded from jsDelivr; everything else is in this repository.
+Plotly.js 2.35.2 is loaded from jsDelivr and jsPDF 2.5.1 from cdnjs (on the first PDF export); everything else is in this repository.

@@ -44,7 +44,6 @@ select, input[type=search] { width: 100%; padding: 6px 8px; border: 1px solid va
 button { font: inherit; font-size: 12.5px; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--line);
   background: var(--bg); color: var(--text); cursor: pointer; }
 button:hover { border-color: var(--accent); }
-.presets { display: flex; flex-wrap: wrap; gap: 6px; }
 .layers { list-style: none; margin: 0; padding: 0; }
 .layers li { display: flex; align-items: center; gap: 7px; padding: 2px 0; font-size: 13px; }
 .layers li label { display: flex; align-items: center; gap: 7px; cursor: pointer; flex: 1; }
@@ -66,6 +65,17 @@ button:hover { border-color: var(--accent); }
 #detail .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 24px; }
 .hint { color: var(--muted); font-size: 12.5px; }
 a { color: var(--accent); }
+.recs { display: flex; flex-direction: column; gap: 6px; }
+.rec { text-align: left; padding: 7px 9px; border-radius: 8px; line-height: 1.3; }
+.rec b { display: block; font-size: 13px; font-weight: 600; }
+.rec span { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.rec.on { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.rec .cur { color: var(--accent); font-size: 11px; font-weight: 600; margin-left: 4px; }
+#guide { display: none; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 8px; padding: 8px 12px; margin: 0 0 8px; font-size: 13px; max-width: 900px; }
+#guide b { font-weight: 650; }
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 0 4px 8px; font-size: 12.5px; color: var(--muted); }
+.toolbar button { font-weight: 600; }
+.toolbar label { display: flex; gap: 5px; align-items: center; cursor: pointer; }
 @media (max-width: 820px) {
   .wrap { grid-template-columns: 1fr; }
   aside { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--line); }
@@ -96,8 +106,9 @@ a { color: var(--accent); }
   <div class="row"><label><input type="checkbox" id="same" checked> same range on x and y</label><button id="autor">auto range</button></div>
   <p class="hint" style="margin:4px 0 0">Range: a number such as 0.03, 1e-2 or 10^-1.5. Empty = automatic.</p>
 
-  <h2>Presets</h2>
-  <div class="presets" id="presets"></div>
+  <h2>Recommended axes</h2>
+  <div class="row" style="margin:0 0 6px"><label><input type="checkbox" id="rec_cur"> only pairs with the current x or y</label></div>
+  <div class="recs" id="recs"></div>
 
   <h2>Reference layers</h2>
   <div class="row"><label><input type="checkbox" id="ref_diag" checked> y = x</label>
@@ -110,10 +121,17 @@ a { color: var(--accent); }
   <h2>Find network</h2>
   <input type="search" id="find" list="netlist" placeholder="e.g. power-US-Grid">
   <datalist id="netlist"></datalist>
-  <p class="hint">Click a point to list all its indices. Drag to zoom, double-click to reset.</p>
+  <p class="hint">Click a point to list all its indices. Drag to zoom, double-click to reset. PNG and PDF export the current axes, ranges (including a zoom) and visible layers on a white background.</p>
   <p class="hint"><a href="data/nei_indices.csv" download>Download all indices (CSV)</a></p>
 </aside>
 <main>
+  <div id="guide"></div>
+  <div class="toolbar">
+    <button id="exp_png">⇩ PNG</button><button id="exp_pdf">⇩ PDF</button>
+    <label><input type="checkbox" id="exp_leg" checked> legend</label>
+    <label><input type="checkbox" id="exp_note"> footnote (n, ρ, source)</label>
+    <span id="exp_msg"></span>
+  </div>
   <div class="stats" id="stats"></div>
   <div class="plotbox"><div id="plot"></div></div>
   <div id="detail"><span class="hint">No network selected.</span></div>
@@ -129,7 +147,7 @@ a { color: var(--accent); }
   const CAT = Object.fromEntries(CATS.map(c => [c.key, c]));
   const ROWS = D.rows;
   const state = { x: "C_deg", y: "C_gnm", xlog: true, ylog: true, on: {}, find: "", picked: null,
-    xr: [null, null], yr: [null, null], same: true };
+    xr: [null, null], yr: [null, null], same: true, rec: null };
   CATS.forEach(c => state.on[c.key] = true);
 
   // manuscript marker macro -> plotly symbol
@@ -181,14 +199,81 @@ a { color: var(--accent); }
       sel.appendChild(og);
     }
   }
-  const PRESETS = [
-    ["𝒞deg vs 𝒞gnm", "C_deg", "C_gnm"], ["𝓘̄real vs ⟨𝓘⟩deg", "Ibar_real", "I_deg"], ["𝓘̄real vs ⟨𝓘⟩gnm", "Ibar_real", "I_gnm"],
-    ["𝒞deg vs 𝒞sbm", "C_deg", "C_sbm"], ["𝒞deg vs 𝒞dcsbm", "C_deg", "C_dcsbm"], ["⟨k⟩ vs 𝓘real", "k_mean", "I_real"],
-    ["⟨k⟩ vs 𝓢real", "k_mean", "S_real"], ["N vs 𝓘real", "N", "I_real"], ["𝓘inter vs 𝓘intra (Bdc)", "Iinter_Bdc_real", "Iintra_Bdc_real"],
-    ["𝓘real vs 𝓘̄real/𝓘real", "I_real", "Ibar_over_I"]];
-  const pre = document.getElementById("presets");
-  PRESETS.forEach(([lab, x, y]) => { const b = document.createElement("button"); b.textContent = lab;
-    b.onclick = () => { setAxes(x, y); }; pre.appendChild(b); });
+  // physically meaningful axis pairs: [title, x, y, xlog, ylog, same range, layers, refs {diag, one}, one-line why, how to read]
+  const REC = [
+    ["Beyond degrees: two null contrasts", "C_deg", "C_gnm", 1, 1, 1, "non-road", [1, 1],
+     "𝒞 < 1: the real spread is smaller than the null mean.",
+     "ln 𝒞<sub>gnm</sub> = ln(⟨𝓘⟩<sub>deg</sub>/⟨𝓘⟩<sub>gnm</sub>) + ln 𝒞<sub>deg</sub> (Eq. 4): the vertical distance from y = x is the part of the ER contrast that the degree sequence alone produces. Points left of x = 1 are more reproducible than their degree-preserving randomizations."],
+    ["What the degree sequence does", "I_gnm", "I_deg", 1, 1, 1, "non-road", [1, 0],
+     "Null against null: degree heterogeneity alone.",
+     "Both axes are null means, no real network. Below y = x the degree-preserving null already scatters less than the size-and-density null, so heterogeneous degrees by themselves make the embedding more reproducible."],
+    ["Real network vs degree-preserving null", "I_deg", "Ibar_real", 1, 1, 1, "non-road", [1, 0],
+     "Below y = x: structure beyond degrees lowers the NEI.",
+     "y/x = 𝒞<sub>deg</sub>. The manuscript finds the real estimate below the degree-preserving mean in 60 of 63 non-road networks; the exceptions sit above the line."],
+    ["Do modules close the gap?", "C_deg", "C_dcsbm", 1, 1, 1, "non-road", [1, 1],
+     "𝒞<sub>dcsbm</sub> → 1: block structure explains the deficit.",
+     "The DC-SBM null keeps degrees and the edge counts between blocks. Points that rise from 𝒞<sub>deg</sub> < 1 to 𝒞<sub>dcsbm</sub> ≈ 1 owe their low NEI to modules; points still below y = 1 keep a residual that neither degrees nor blocks reproduce."],
+    ["Real network vs DC-SBM null", "I_dcsbm", "Ibar_real", 1, 1, 1, "non-road", [1, 0],
+     "The residual after degrees and modules.",
+     "Below y = x the real network is still more reproducible than its degree-corrected block-model randomization (48 of 58 in the manuscript)."],
+    ["Degree correction inside blocks", "I_sbm", "I_dcsbm", 1, 1, 1, "non-road", [1, 0],
+     "On y = x degrees add nothing once e<sub>rs</sub> is fixed.",
+     "Both nulls fix the block edge counts; only DC-SBM also fixes degrees. Points spread evenly about the diagonal (30 of 57 below) mean degree correction does not change the spread once the blocks are given."],
+    ["Within vs between modules", "Iinter_Bdc_real", "Iintra_Bdc_real", 1, 1, 1, "non-road", [1, 0],
+     "Above y = x: pairs inside a module scatter more.",
+     "Mean r<sub>ij</sub> over pairs in the same degree-corrected block against pairs in different blocks (Table S8). Above the diagonal the modules themselves are not rigid even though the distances between them are reproducible."],
+    ["Block constraint and the inter-module scatter", "Iinter_B_gnm", "Iinter_B_sbm", 1, 1, 1, "non-road", [1, 0],
+     "Labeling both nulls by the same blocks.",
+     "Inter-module pairs under the ER-derived null (x) and the SBM null (y). Below y = x the block constraint alone lowers the scatter between modules, the separation the real networks show."],
+    ["Real modules vs DC-SBM modules", "Iintra_Bdc_dcsbm", "Iintra_Bdc_real", 1, 1, 1, "non-road", [1, 0],
+     "Below y = x: the real network tightens its modules.",
+     "Intra-module scatter of the real network against the DC-SBM null with the same partition; the part of the residual gap carried by pairs inside modules."],
+    ["Density sets the scale (Fig. 3a)", "k_mean", "I_real", 1, 1, 0, "all", [0, 0],
+     "Does the number of links determine 𝓘?",
+     "NEI against mean degree for all 165 networks. At equal ⟨k⟩ the NEI spans an order of magnitude, and the road networks sit far below: links alone do not set the spread."],
+    ["Pair heterogeneity vs density (Fig. 3b)", "k_mean", "S_real", 1, 1, 0, "non-road", [0, 0],
+     "How unevenly the spread is shared among pairs.",
+     "𝓢 is the variance of r<sub>ij</sub> over pairs. Large 𝓢 at small ⟨k⟩ marks sparse networks whose spread is carried by a few pairs."],
+    ["Concentration of the spread", "sqrt_I_real", "sqrtS_over_I", 1, 1, 0, "non-road", [0, 0],
+     "√𝓢/𝓘 large: few pairs carry the spread.",
+     "√𝓘 is the rms relative fluctuation per pair; √𝓢/𝓘 ≈ 1 for an ER-like even spread (0.95 for ER at N = 100) and grows when a few pairs dominate (22.9 for the random geometric graph)."],
+    ["Pair heterogeneity vs the degree null", "S_deg", "S_real", 1, 1, 1, "non-road", [1, 0],
+     "Above y = x: real spread more uneven than the null.",
+     "Unlike 𝓘, 𝓢 does not separate real networks from their randomizations: about half lie on each side."],
+    ["Finite-M convergence", "N", "Ibar_over_I", 1, 0, 0, "all", [0, 1],
+     "Block mean (M = 50) over the M = 500 score.",
+     "1 = converged. The block mean falls below the 500-terminal score when rare, well-separated terminal states are missed at M = 50; this is why 𝒞 compares real and null at the common M = 50."],
+    ["One block vs the block mean", "Ibar_real", "I50", 1, 1, 1, "all", [1, 0],
+     "Precision of the rank-test observable.",
+     "𝓘̂<sub>50</sub> (first block, used in the rank tests) against the mean of ten blocks; scatter about y = x is the block-to-block noise."],
+  ];
+  const recEl = document.getElementById("recs");
+  function renderRecs() {
+    const onlyCur = document.getElementById("rec_cur").checked;
+    recEl.innerHTML = "";
+    REC.forEach((r, i) => {
+      const cur = [r[1], r[2]].some(k => k === state.x || k === state.y);
+      if (onlyCur && !cur) return;
+      const b = document.createElement("button"); b.className = "rec" + (state.rec === i ? " on" : "");
+      b.innerHTML = `<b>${r[0]}${cur ? '<span class="cur" style="display:inline">· current axis</span>' : ""}</b><span>${strip(VARS[r[1]].label)} → ${strip(VARS[r[2]].label)} · ${r[8]}</span>`;
+      b.onclick = () => applyRec(i); recEl.appendChild(b);
+    });
+  }
+  function applyRec(i) {
+    const r = REC[i];
+    state.x = r[1]; state.y = r[2]; state.xlog = !!r[3]; state.ylog = !!r[4]; state.same = !!r[5];
+    state.xr = [null, null]; state.yr = [null, null];
+    CATS.forEach(c => state.on[c.key] = r[6] === "all" || c.group === r[6]); syncLayers();
+    document.getElementById("ref_diag").checked = !!r[7][0]; document.getElementById("ref_one").checked = !!r[7][1];
+    state.rec = i; sync(); draw(); writeHash();
+  }
+  function showGuide() {
+    const g = document.getElementById("guide");
+    const r = state.rec != null ? REC[state.rec] : null;
+    if (r && r[1] === state.x && r[2] === state.y) { g.style.display = "block"; g.innerHTML = `<b>${r[0]}${/[?.)]$/.test(r[0]) ? "" : "."}</b> ${r[9]}`; }
+    else { g.style.display = "none"; state.rec = null; }
+  }
+  document.getElementById("rec_cur").onchange = renderRecs;
 
   const lay = document.getElementById("layers");
   for (const g of ["non-road", "road"]) {
@@ -313,10 +398,10 @@ a { color: var(--accent); }
     if (xs.length) {
       const lo = Math.min(...xs, ...ys) / 1e3, hi = Math.max(...xs, ...ys) * 1e3;
       if (document.getElementById("ref_diag").checked)
-        shapes.push({ type: "line", xref: "x", yref: "y", x0: lo, y0: lo, x1: hi, y1: hi, line: { color: css("--ref"), width: 1.2, dash: "dash" }, layer: "below" });
+        shapes.push({ type: "line", xref: "x", yref: "y", x0: lo, y0: lo, x1: hi, y1: hi, line: { color: css("--ref"), width: 1.2, dash: "dash" }, layer: "between" });
       if (document.getElementById("ref_one").checked) {
-        shapes.push({ type: "line", xref: "x", yref: "paper", x0: 1, x1: 1, y0: 0, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "below" });
-        shapes.push({ type: "line", xref: "paper", yref: "y", x0: 0, x1: 1, y0: 1, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "below" });
+        shapes.push({ type: "line", xref: "x", yref: "paper", x0: 1, x1: 1, y0: 0, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "between" });
+        shapes.push({ type: "line", xref: "paper", yref: "y", x0: 0, x1: 1, y0: 1, y1: 1, line: { color: css("--ref"), width: 1, dash: "dot" }, layer: "between" });
       }
     }
     const decades = v => { const p = v.filter(q => q > 0); return p.length ? Math.log10(Math.max(...p) / Math.min(...p)) : 0; };
@@ -351,6 +436,8 @@ a { color: var(--accent); }
     };
     Plotly.react(plotEl, traces, layout, { responsive: true, displaylogo: false,
       toImageButtonOptions: { format: "png", filename: `nei_${X}_vs_${Y}`, scale: 3 } });
+    LAST = { traces, layout, n: xs.length, rho: spearman(xs, ys) };
+    showGuide(); renderRecs();
 
     const rho = spearman(xs, ys);
     const below = ys.filter((y, i) => y < xs[i]).length;
@@ -360,6 +447,65 @@ a { color: var(--accent); }
       `<span>median x <b>${fmt(median(xs))}</b>, median y <b>${fmt(median(ys))}</b></span>` +
       `<span>y &lt; x in <b>${below}</b>/${xs.length}</span>`;
   }
+
+  // ---------- export (current axes, ranges incl. zoom, visible layers; white background) ----------
+  let LAST = null;
+  const LIGHT = { bg: "#ffffff", text: "#1d2330", grid: "#e6e9ee", line: "#1d2330", ref: "#7a8291", hl: "#111111" };
+  function exportFigure() {
+    const legend = document.getElementById("exp_leg").checked, note = document.getElementById("exp_note").checked;
+    const P = 520, L = 86, B = 78, T = 24, R = legend ? 250 : 28;           // square plot area P x P
+    const full = plotEl._fullLayout;
+    const ax = (src, cur) => Object.assign({}, src, { range: cur.range.slice(), autorange: false, gridcolor: LIGHT.grid,
+      linecolor: LIGHT.line, tickcolor: LIGHT.line, linewidth: 1, title: Object.assign({}, src.title, { font: { size: 16, color: LIGHT.text } }),
+      tickfont: { size: 13, color: LIGHT.text }, automargin: false });
+    const counts = {};
+    const traces = LAST.traces.map(tr => {
+      const c = JSON.parse(JSON.stringify(tr));
+      if (c.name) { c.name = `${c.name} (${c.x.length})`; }
+      if (c.marker && c.marker.line) c.marker.line.color = LIGHT.hl;
+      if (c.textfont) c.textfont.color = LIGHT.hl;
+      if (c.mode === "markers+text") { c.marker.color = LIGHT.hl; }
+      c.hoverinfo = "skip"; delete c.hovertemplate; return c; });
+    const shapes = (LAST.layout.shapes || []).map(s => Object.assign({}, s, { line: Object.assign({}, s.line, { color: LIGHT.ref }) }));
+    const annotations = [];
+    if (note) annotations.push({ xref: "paper", yref: "paper", x: 1, y: -B / P + 0.01, xanchor: "right", yanchor: "bottom", showarrow: false,
+      text: `n = ${LAST.n} · Spearman ρ = ${isFinite(LAST.rho) ? LAST.rho.toFixed(3) : "—"} · ${D.source.split(" (")[0]}`, font: { size: 10, color: "#6b7280" } });
+    const layout = {
+      width: L + P + R, height: T + P + B, paper_bgcolor: LIGHT.bg, plot_bgcolor: LIGHT.bg,
+      font: { family: "Arial, Helvetica, sans-serif", color: LIGHT.text, size: 13 },
+      margin: { l: L, r: R, t: T, b: B, autoexpand: false },
+      xaxis: ax(LAST.layout.xaxis, full.xaxis), yaxis: ax(LAST.layout.yaxis, full.yaxis),
+      shapes, annotations, showlegend: legend,
+      legend: { x: 1.03, xanchor: "left", y: 1, yanchor: "top", font: { size: 12.5, color: LIGHT.text }, itemsizing: "constant", bgcolor: "rgba(0,0,0,0)" }
+    };
+    return { traces, layout };
+  }
+  async function renderExport(scale) {
+    const { traces, layout } = exportFigure();
+    const div = document.createElement("div"); div.style.cssText = "position:fixed;left:-10000px;top:0"; document.body.appendChild(div);
+    try {
+      await Plotly.newPlot(div, traces, layout, { staticPlot: true });
+      const url = await Plotly.toImage(div, { format: "png", width: layout.width, height: layout.height, scale });
+      return { url, w: layout.width, h: layout.height };
+    } finally { Plotly.purge(div); div.remove(); }
+  }
+  const fname = () => `nei_${state.x}_vs_${state.y}`;
+  const msg = s => document.getElementById("exp_msg").textContent = s;
+  document.getElementById("exp_png").onclick = async () => {
+    msg("rendering…");
+    try { const { url } = await renderExport(4); const a = document.createElement("a"); a.href = url; a.download = fname() + ".png"; a.click(); msg("PNG saved (4× scale)"); }
+    catch (e) { msg("export failed: " + e.message); } };
+  function loadScript(src) { return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = () => no(new Error("could not load " + src)); document.head.appendChild(s); }); }
+  document.getElementById("exp_pdf").onclick = async () => {
+    msg("rendering…");
+    try {
+      if (!window.jspdf) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+      const { url, w, h } = await renderExport(5);                   // 5x of a 72-pt page = 360 dpi
+      const pdf = new window.jspdf.jsPDF({ orientation: w > h ? "landscape" : "portrait", unit: "pt", format: [w, h], compress: true });
+      pdf.addImage(url, "PNG", 0, 0, w, h, undefined, "FAST");
+      pdf.setProperties({ title: `NEI ${state.x} vs ${state.y}`, creator: "NEI Explorer" });
+      pdf.save(fname() + ".pdf"); msg("PDF saved (360 dpi)");
+    } catch (e) { msg("export failed: " + e.message); } };
 
   // ---------- details ----------
   function showDetail(r) {
